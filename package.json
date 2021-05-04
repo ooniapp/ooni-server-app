@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "async-promise-queue": "^1.0.5",
+    "aws-sdk": "^2.896.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "cookie-parser": "~1.4.4",
@@ -22,7 +23,6 @@
     "morgan": "~1.9.1",
     "pg": "^8.5.1",
     "pug": "2.0.0-beta11",
-    "twing": "^5.0.2",
-    "aws-sdk": "^2.896.0"
+    "twing": "^5.0.2"
   }
 }
