@@ -2,19 +2,19 @@ var express = require('express');
 var router = express.Router();
 const knex = require('../db');
 const AuthController = require("../oauth");
-//const AWS = require('aws-sdk')
+const AWS = require('aws-sdk')
 const fs = require('fs');
 const queue = require('async-promise-queue');
 
 
 const AWS_BUCKET_NAME = "ooni-users-photos";
 
-/*const s3 = new AWS.S3({
+const s3 = new AWS.S3({
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   },
-});*/
+});
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
@@ -120,7 +120,7 @@ router.post('/photo', AuthController.verifyToken, async function (req, res, next
       }; 
       //send the file to promises folder 
       console.log(`start process :  ${files[i].filename}`)
-      //uploadToS3Process.push(s3.upload(params).promise())
+      uploadToS3Process.push(s3.upload(params).promise())
       console.log(`end :  ${files[i].filename}`)
     }
   }
