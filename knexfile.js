@@ -3,7 +3,7 @@
 module.exports = {
   development: {
     client: "pg",
-    connection: DB_URL,
+    connection: process.env.DB_URL,
     migrations: {
       tableName: "knex_migrations"
     }
@@ -11,7 +11,7 @@ module.exports = {
 
   staging: {
     client: "pg",
-    connection: DB_URL,
+    connection: process.env.DB_URL,
     pool: {
       min: 2,
       max: 10
@@ -23,7 +23,7 @@ module.exports = {
 
   production: {
     client: "pg",
-    connection: DB_URL,
+    connection: process.env.DB_URL,
     pool: {
       min: 2,
       max: 10

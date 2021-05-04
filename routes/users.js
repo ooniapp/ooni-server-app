@@ -7,14 +7,12 @@ const fs = require('fs');
 const queue = require('async-promise-queue');
 
 
-const AWS_ACCESS_KEY_ID = "AKIA2WWRCE6XBKAKBEB7";
-const AWS_SECRET_ACCESS_KEY = "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";
 const AWS_BUCKET_NAME = "ooni-users-photos";
 
 const s3 = new AWS.S3({
   credentials: {
-    accessKeyId: AWS_ACCESS_KEY_ID,
-    secretAccessKey: AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   },
 });
 /* GET users listing. */
