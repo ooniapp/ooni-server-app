@@ -8,12 +8,11 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/ooni</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="MySQL for 5.1" uuid="d9c90edf-1b5e-4e53-95ae-68b043c776f0">
-      <driver-ref>mysql</driver-ref>
+    <data-source source="LOCAL" name="MariaDB - heroku_31115dc178c7353@us-cdbr-east-03.cleardb.com" uuid="5c73f385-8b23-46c9-8eb8-5f1ca9511a80">
+      <driver-ref>mariadb</driver-ref>
       <synchronize>true</synchronize>
-      <configured-by-url>true</configured-by-url>
-      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>mysql://bfbaf3145188e3:a08cd334@us-cdbr-east-03.cleardb.com</jdbc-url>
+      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mariadb://us-cdbr-east-03.cleardb.com:3306/heroku_31115dc178c7353</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

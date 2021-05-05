@@ -1,12 +1,13 @@
 
 const knex = require("knex")({
-  client: "pg",
+  client: "mysql",
   connection: {
-    host : '127.0.0.1:8889',
-    user : 'root',
-    password : 'root',
-    database : 'ooni_database'
-  }
+    host : 'us-cdbr-east-03.cleardb.com',
+    user : 'bfbaf3145188e3',
+    password : 'a08cd334',
+    database : 'heroku_31115dc178c7353'
+  },
 });
+
 
 module.exports = knex;

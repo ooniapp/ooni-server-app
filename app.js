@@ -10,6 +10,7 @@ const bodyParser = require("body-parser");
 
 const cors = require("cors");
 var app = express();
+var session = require('express-session');
 
 app.use(cors());
 
@@ -26,9 +27,30 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  key: 'logged',
+  secret: '06111998OONI7624!',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    expires: 600000
+  }
+}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+
+
+
+
+app.use((req, res, next) => {
+  if (req.cookies.logged && !req.session.logged) {
+    res.clearCookie('logged');
+  }
+  next();
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

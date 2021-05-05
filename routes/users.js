@@ -11,8 +11,8 @@ const AWS_BUCKET_NAME = "ooni-users-photos";
 
 const s3 = new AWS.S3({
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_KEY,
   },
 });
 
@@ -103,7 +103,7 @@ router.post('/photo', AuthController.verifyToken, async function (req, res, next
   let uploadToS3Process = []
 
   for (let i = 0; i < files.length; i++) {
-   
+
     let photo = await knex('photo').where({users_id:req.userId,name:files[i].filename}).first();
     if (photo){
       continue
@@ -111,24 +111,24 @@ router.post('/photo', AuthController.verifyToken, async function (req, res, next
       console.log(`uploading ${files[i].filename}`)
 
       let buffer = Buffer.from(files[i].uri.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-     
+
       const params = {
         Bucket: AWS_BUCKET_NAME,
         Key: files[i].filename, // File name you want to save as in S3
         Body: buffer,
         ACL: 'public-read',
-      }; 
-      //send the file to promises folder 
+      };
+      //send the file to promises folder
       console.log(`start process :  ${files[i].filename}`)
       uploadToS3Process.push(s3.upload(params).promise())
       console.log(`end :  ${files[i].filename}`)
     }
   }
-  
+
   let sucess = null
   await Promise.all(uploadToS3Process).then((response)=>{
      console.log(`response is ${response}`)
-      
+
      return response;
   }).catch((failure)=>{
     console.log(`failure is ${failure}`)

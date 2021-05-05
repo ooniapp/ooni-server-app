@@ -1,14 +1,43 @@
 var express = require('express');
+
 const knex = require("../db");
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
 
-  res.render('index');
+var sessionChecker = (req, res, next) => {
+    if (req.session.logged) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+};
+
+
+router.get('/login',function(req, res, next) {
+    res.render('login');
 });
 
-router.get('/dashboard',async function (req,res){
+router.post('/login',function (req,res){
+   const {email,password} = req.body
+    if (email === '' || password === ''){
+        console.log('please fill one')
+    }else {
+        console.log('email is',email)
+        console.log('password is',password)
+        if ((email === 'charzzz90265@gmail.com') && (password === '06111998OONI7624!')){
+            req.session.logged = true
+            res.redirect('/dashboard');
+        }else {
+            console.log('credentials incorrect')
+        }
+    }
+})
+/* GET home page. */
+router.get('/',sessionChecker, function(req, res, next) {
+  res.redirect('/dashboard');
+});
+
+router.get('/dashboard',sessionChecker,async function (req,res){
   let users = await knex('users')
   console.log('users',users)
   res.render('dashboard',{
