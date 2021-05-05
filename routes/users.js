@@ -42,13 +42,13 @@ router.post('/', async function (req, res, next) {
 
 
   const token = jwt.sign({id: userId}, process.env.JWT_SECRET);
-
-  res.send({
-    status: 'OK', data: {
+  return res.json({
+    status: 'OK',
+    data: {
       userId,
       token
     }
-  });
+  })
 });
 
 
@@ -63,12 +63,13 @@ router.post('/login', async function (req, res, next) {
 
   if (user && user.password) {
     const token = jwt.sign({id: user.id}, process.env.JWT_SECRET);
-    res.send({
+
+    return res.json({
       status: 'OK', data: {
         token
       }
-    });
-    return;
+    })
+
   }
 
   res.send({
