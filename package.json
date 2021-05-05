@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "bootstrap": "knex migrate:latest && knex seed:run",
+    "bootstrap": "knex migrate:latest",
     "start": "node ./bin/www"
   },
   "dependencies": {
