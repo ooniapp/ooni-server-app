@@ -51,7 +51,7 @@ router.get('/user/:id/details',async function (req,res){
  console.log('data',data)
   res.render('details',{
     title: 'Dashboard',
-    data:data
+    photos:data
   })
 })
 
