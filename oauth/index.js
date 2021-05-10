@@ -12,7 +12,7 @@ const verifyToken = async (req, res, next) => {
     if (result.error) {
       return res
         .status(500)
-        .send({ auth: false, message: "Failed to authenticate token." });
+        .send({ auth: false, message: "Failed to authenticate token."+result.error.message });
     }
     const env = result.parsed;
     const user = jwt.verify(token, process.env.JWT_SECRET);
