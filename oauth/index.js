@@ -15,7 +15,7 @@ const verifyToken = async (req, res, next) => {
         .send({ auth: false, message: "Failed to authenticate token." });
     }
     const env = result.parsed;
-    const user = jwt.verify(token, env.JWT_SECRET);
+    const user = jwt.verify(token, process.env.JWT_SECRET);
     if (!user) {
       return res
         .status(500)
