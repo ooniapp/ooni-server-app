@@ -3,6 +3,7 @@ exports.up = function(knex, Promise) {
     table.increments();
     table.text('name');
     table.text("url");
+    table.boolean("isPosted")
     table
       .integer("users_id")
       .unsigned()

@@ -5,16 +5,40 @@ const AuthController = require("../oauth");
 const AWS = require('aws-sdk')
 const fs = require('fs');
 const queue = require('async-promise-queue');
+const multer = require('multer')
+const multerS3 = require('multer-s3')
+
+const AWS_BUCKET_NAME = "ooni-server-media-storage";
 
 
-const AWS_BUCKET_NAME = "ooni-users-photos";
-
-const s3 = new AWS.S3({
+/*const s3 = new AWS.S3({
     credentials: {
         accessKeyId: process.env.AWS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_KEY
     },
+});*/
+
+const s3 = new AWS.S3({
+    credentials: {
+        accessKeyId: "AKIA2WWRCE6XOUA7TCHZ",
+        secretAccessKey: "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"
+    },
 });
+
+const upload = multer({
+    storage: multerS3({
+        s3,
+        bucket: AWS_BUCKET_NAME,
+        acl: 'public-read',
+        metadata(req, file, cb) {
+            cb(null, {fieldName: file.fieldname});
+        },
+        key(req, file, cb) {
+            cb(null,file.originalname);
+        }
+    })
+
+})
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
@@ -82,8 +106,9 @@ router.post('/login', async function (req, res, next) {
 
 router.get('/photo', AuthController.verifyToken, async function (req, res, next) {
     try {
-        console.log('userId', req.userId)
-        const data = await knex('photo').where({users_id: req.userId}).pluck('url').orderBy('created_at', 'desc');
+        console.log('userId from', req.userId)
+        const data = await knex('photo').where({users_id: req.userId,isPosted:1}).pluck('url').orderBy('created_at', 'desc');
+        console.log('data is ',data)
         res.status(200).json({status: 'OK', data})
     } catch (e) {
         res.status(200).json({status: 'NO', 'message': e.toString()})
@@ -92,15 +117,14 @@ router.get('/photo', AuthController.verifyToken, async function (req, res, next)
 
 });
 
-router.post('/photo', AuthController.verifyToken, async function (req, res, next) {
+router.post('/photo',AuthController.verifyToken,upload.single('photo'), async function (req, res, next) {
 
     const userId = req.userId;
     const moment = require("moment");
     const timestamps = await moment.utc().format();
     //check if the image exists =
 
-    let files = req.body.files;
-
+/*
     let uploadToS3Process = []
 
     for (let i = 0; i < files.length; i++) {
@@ -163,6 +187,27 @@ router.post('/photo', AuthController.verifyToken, async function (req, res, next
                  data: []
             });
         }
+    }*/
+    let uploadedFile = req.file;
+    console.log('userId ',userId)
+    console.log('uploaded file is ',uploadedFile)
+    if (uploadedFile){
+        const uploaded = await knex('photo').insert({
+            users_id: userId,
+            name: uploadedFile.originalname,
+            url: uploadedFile.location,
+            isPosted:1,
+            created_at: timestamps,
+            updated_at: timestamps
+        }).then((result) => {
+            return res.status(200).json({
+                status: 'OK',
+                data: uploadedFile.location
+            })
+        }).catch((error) => {
+            console.log('error from database')
+            throw error
+        });
     }
 });
 
