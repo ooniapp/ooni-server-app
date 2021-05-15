@@ -123,71 +123,6 @@ router.post('/photo',AuthController.verifyToken,upload.single('photo'), async fu
     const moment = require("moment");
     const timestamps = await moment.utc().format();
     //check if the image exists =
-
-/*
-    let uploadToS3Process = []
-
-    for (let i = 0; i < files.length; i++) {
-
-        let photo = await knex('photo').where({users_id: req.userId, name: files[i].filename}).first();
-        if (photo) {
-            continue
-        } else {
-            console.log(`uploading ${files[i].filename}`)
-
-            let buffer = Buffer.from(files[i].uri.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-
-            const params = {
-                Bucket: AWS_BUCKET_NAME,
-                Key: files[i].filename, // File name you want to save as in S3
-                Body: buffer,
-                ACL: 'public-read',
-            };
-            //send the file to promises folder
-            console.log(`start process :  ${files[i].filename}`)
-            uploadToS3Process.push(s3.upload(params).promise())
-            console.log(`end :  ${files[i].filename}`)
-        }
-    }
-    let save = []
-    let data = await Promise.all(uploadToS3Process).then((response) => {
-        return response
-    }).catch((failure) => {
-        return [];
-        res.status(500).json({status: 'NO', 'message': failure.toString()})
-
-    })
-    let uploadedCount = 0;
-    if (data.length > 0) {
-
-        for (const uploadedFile of data) {
-            const uploaded = await knex('photo').insert({
-                users_id: userId,
-                name: uploadedFile.Key,
-                url: uploadedFile.Location,
-                created_at: timestamps,
-                updated_at: timestamps
-            }).then((result) => {
-                uploadedCount = uploadedCount + 1
-            }).catch((error) => {
-                console.log('error from database')
-                throw error
-            });
-
-        }
-        if (uploadedCount > 0) {
-            console.log('sandra',uploadedCount)
-            return res.status(200).json({
-                status: 'OK',
-                data: uploadedCount
-            })
-        } else {
-            return res.status(500).json({
-                'status': 'NO',
-                 data: []
-            });
-        }
-    }*/
     let uploadedFile = req.file;
     console.log('userId ',userId)
     console.log('uploaded file is ',uploadedFile)
@@ -211,5 +146,44 @@ router.post('/photo',AuthController.verifyToken,upload.single('photo'), async fu
     }
 });
 
+
+//method for upload in background
+router.post('/media-background',AuthController.verifyToken,upload.array('backgroundUpload'),async function (req,res,next){
+     //upload the video and data in background
+    const userId = req.userId;
+    const token = req.headers["x-access-token"];
+    console.log('user id is ',userId)
+    console.log('token id is ',token)
+    const moment = require("moment");
+    const timestamps = await moment.utc().format();
+    let backgroundUpload = req.files
+
+
+    let uploadLocation = [];
+
+    for (const backgroundUploadElement of backgroundUpload) {
+        const uploaded = await knex('photo').insert({
+            users_id: userId,
+            name: backgroundUploadElement.originalname,
+            url: backgroundUploadElement.location,
+            isPosted:0,
+            created_at: timestamps,
+            updated_at: timestamps
+        }).then((result) => {
+            uploadLocation.push(backgroundUploadElement)
+        }).catch((error) => {
+            console.log('error from database')
+            throw error
+        });
+    }
+
+    if (uploadLocation.length > 0){
+        return res.status(200).json({
+            status: 'OK',
+            data: uploadLocation
+        })
+    }
+
+})
 
 module.exports = router;
