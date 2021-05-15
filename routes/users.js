@@ -18,14 +18,7 @@ const s3 = new AWS.S3({
     },
 });
 
-/*
-const s3 = new AWS.S3({
-    credentials: {
-        accessKeyId: "AKIA2WWRCE6XOUA7TCHZ",
-        secretAccessKey: "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"
-    },
-});
-*/
+
 
 const upload = multer({
     storage: multerS3({
