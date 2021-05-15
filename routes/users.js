@@ -11,19 +11,21 @@ const multerS3 = require('multer-s3')
 const AWS_BUCKET_NAME = "ooni-server-media-storage";
 
 
-/*const s3 = new AWS.S3({
+const s3 = new AWS.S3({
     credentials: {
         accessKeyId: process.env.AWS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_KEY
     },
-});*/
+});
 
+/*
 const s3 = new AWS.S3({
     credentials: {
         accessKeyId: "AKIA2WWRCE6XOUA7TCHZ",
         secretAccessKey: "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"
     },
 });
+*/
 
 const upload = multer({
     storage: multerS3({
