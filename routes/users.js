@@ -7,6 +7,7 @@ const fs = require('fs');
 const queue = require('async-promise-queue');
 const multer = require('multer')
 const multerS3 = require('multer-s3')
+const result = require("dotenv").config();
 
 const AWS_BUCKET_NAME = "ooni-server-media-storage";
 
@@ -23,7 +24,7 @@ const s3 = new AWS.S3({
 const upload = multer({
     storage: multerS3({
         s3,
-        bucket: AWS_BUCKET_NAME,
+        bucket: process.env.AWS_BUCKET_NAME,
         acl: 'public-read',
         metadata(req, file, cb) {
             cb(null, {fieldName: file.fieldname});
@@ -102,7 +103,7 @@ router.post('/login', async function (req, res, next) {
 router.get('/photo', AuthController.verifyToken, async function (req, res, next) {
     try {
         console.log('userId from', req.userId)
-        const data = await knex('photo').where({users_id: req.userId,isPosted:1}).pluck('url').orderBy('created_at', 'desc');
+        const data = await knex('photo').where({isPosted:1}).pluck('url').orderBy('created_at', 'desc');
         console.log('data is ',data)
         res.status(200).json({status: 'OK', data})
     } catch (e) {
@@ -180,5 +181,6 @@ router.post('/media-background',AuthController.verifyToken,upload.array('backgro
     }
 
 })
+
 
 module.exports = router;
