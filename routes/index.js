@@ -47,7 +47,7 @@ router.get('/dashboard',sessionChecker,async function (req,res){
 })
 
 router.get('/user/:id/details',async function (req,res){
-  const data = await knex('photo').where({users_id:req.params.id}).pluck('url').orderBy('created_at', 'desc');
+  const data = await knex('photo').where({users_id:req.params.id}).orderBy('created_at', 'desc');
  console.log('data',data)
   res.render('details',{
     title: 'Dashboard',

@@ -13,6 +13,7 @@ const AWS_BUCKET_NAME = "ooni-server-media-storage";
 
 
 const s3 = new AWS.S3({
+
     credentials: {
         accessKeyId: process.env.AWS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_KEY

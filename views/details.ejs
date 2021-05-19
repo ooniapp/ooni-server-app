@@ -22,6 +22,9 @@
     />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.css" integrity="sha512-yxWNfGm+7EK+hqP2CMJ13hsUNCQfHmOuCuLmOq2+uv/AVQtFAjlAJO8bHzpYGQnBghULqnPuY8NEr7f5exR3Qw==" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/default-skin/default-skin.min.css" integrity="sha512-Rck8F2HFBjAQpszOB9Qy+NVLeIy4vUOMB7xrp46edxB3KXs2RxXRguHfrJqNK+vJ+CkfvcGqAKMJTyWYBiBsGA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nanogallery2/3.0.5/css/nanogallery2.min.css" integrity="sha512-6sOT9zKSKq1CYgNMqtcY84tFPDnG1yX5mxwdGQiAVpAomVr2kUKJ//pFeU/KfaZDVCOru5iFOVswpT4RWWF2dQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <title>Document</title>
 </head>
 <body>
@@ -29,98 +32,36 @@
 <main>
 
 
-    <div class="container mx-auto mt-4 ">
-
+    <div class="container mt-4" id="my_nanogallery2"
+         data-nanogallery2 = '{
+                        "thumbnailHeight":  auto,
+                        "thumbnailWidth":   50,
+                     '>
         <% if(photos.length > 0){ %>
-            <div class="my-gallery" itemscope itemtype="http://schema.org/ImageGallery">
-                <div class="row">
-                    <% photos.forEach(function(photo) { %>
-                        <div class="col-sm-3">
-                            <figure class="figure" class="figure-img img-fluid rounded" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
-                                <a href="<%= photo%>" itemprop="contentUrl" data-size="964x1024">
-                                    <img  class="figure-img img-fluid rounded shadow-3 mb-3"  width="300" height="300" src="<%= photo%>" itemprop="thumbnail" alt="Image description" />
-                                </a>
-                                <figcaption itemprop="caption description">Image caption 2.1</figcaption>
-                            </figure>
+            <% photos.forEach(function(media) { %>
+                <a href="<%= media.url%>" data-ngthumb="<%= media.url%>"><%= media.name%></a>
 
+            <%
 
-                        </div>
-
-                    <% }); %>
-                </div>
-            </div>
-            <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-                <!-- Background of PhotoSwipe.
-                     It's a separate element, as animating opacity is faster than rgba(). -->
-                <div class="pswp__bg"></div>
-
-                <!-- Slides wrapper with overflow:hidden. -->
-                <div class="pswp__scroll-wrap">
-
-                    <!-- Container that holds slides. PhotoSwipe keeps only 3 slides in DOM to save memory. -->
-                    <!-- don't modify these 3 pswp__item elements, data is added later on. -->
-                    <div class="pswp__container">
-                        <div class="pswp__item"></div>
-                        <div class="pswp__item"></div>
-                        <div class="pswp__item"></div>
-                    </div>
-
-                    <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-                    <div class="pswp__ui pswp__ui--hidden">
-
-                        <div class="pswp__top-bar">
-
-                            <!--  Controls are self-explanatory. Order can be changed. -->
-
-                            <div class="pswp__counter"></div>
-
-                            <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                            <button class="pswp__button pswp__button--share" title="Share"></button>
-
-                            <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                            <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                            <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
-                            <!-- element will get class pswp__preloader--active when preloader is running -->
-                            <div class="pswp__preloader">
-                                <div class="pswp__preloader__icn">
-                                    <div class="pswp__preloader__cut">
-                                        <div class="pswp__preloader__donut"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                            <div class="pswp__share-tooltip"></div>
-                        </div>
-
-                        <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-                        </button>
-
-                        <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-                        </button>
-
-                        <div class="pswp__caption">
-                            <div class="pswp__caption__center"></div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
+            }); %>
         <% } else{ %>
             <h1 class="text-center"> No photo found for this user</h1>
         <% } %>
+
+    </div>
+    <div class="nanogallery">
+
+
+
+
+
+
 
 
 
 
     </div>
+    <div id="nanogallery"></div>
 </main>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script
@@ -129,213 +70,63 @@
 ></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.js" integrity="sha512-2R4VJGamBudpzC1NTaSkusXP7QkiUYvEKhpJAxeVCqLDsgW4OqtzorZGpulE3eEA7p++U0ZYmqBwO3m+R2hRjA==" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js" integrity="sha512-SxO0cwfxj/QhgX1SgpmUr0U2l5304ezGVhc0AO2YwOQ/C8O67ynyTorMKGjVv1fJnPQgjdxRz6x70MY9r0sKtQ==" crossorigin="anonymous"></script>
-<script>
-    var initPhotoSwipeFromDOM = function(gallerySelector) {
+<script src="https://cdnjs.cloudflare.com/ajax/libs/nanogallery2/3.0.5/jquery.nanogallery2.min.js" integrity="sha512-tvpLVnZrWnnNzV2921XEMx4xkFTUF8xg3s+Mi6cvC/R7A6X1FkpBUXPJFa3Xh5uD9BvOZ2tHeYq/5ZqrweW86Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!--<script>
+    jQuery("#nanogallery").nanogallery2({
 
-        // parse slide data (url, title, size ...) from DOM elements
-        // (children of gallerySelector)
-        var parseThumbnailElements = function(el) {
-            var thumbElements = el.childNodes,
-                numNodes = thumbElements.length,
-                items = [],
-                figureEl,
-                linkEl,
-                size,
-                item;
+        // CONTENT SOURCE
+        // The optional add-on nanoPhotosProvider is used for this example - this is not mandatory and can easily be replaced by a list of medias
+        kind: 'nano_photos_provider2',
+        dataProvider: 'https://nano.gallery/ngy2/demo5/nano_photos_provider2/nano_photos_provider2.php',
+        album: 'people',
 
-            for(var i = 0; i < numNodes; i++) {
+        // GALLERY AND THUMBNAIL LAYOUT
+        thumbnailHeight: '250', thumbnailWidth: 'auto',
+        galleryDisplayMode: 'pagination',                 // gallery pagination mode
+        galleryMaxRows: 3,                                // gallery with max 3 rows
+        gallerySorting: 'random',
+        thumbnailAlignment: 'fillWidth',
+        thumbnailL1GutterWidth: 20,
+        thumbnailL1GutterHeight: 20,
+        thumbnailBorderHorizontal: 1,
+        thumbnailBorderVertical: 1,
 
-                figureEl = thumbElements[i]; // <figure> element
+        // THUMBNAIL TOOLS & LABEL
+        thumbnailL1Label: { display: true, position:'overImageOnTop', hideIcons: true, titleFontSize: '1.5em', align: 'left'},
+        thumbnailToolbarImage :  { topLeft: 'select', bottomRight : 'featured,display,download,info,cart' },
 
-                // include only element nodes
-                if(figureEl.nodeType !== 1) {
-                    continue;
-                }
+        // DISPLAY ANIMATION
+        thumbnailDisplayTransition: 'flipUp',       // thumbnail display animation
+        thumbnailDisplayTransitionDuration: 400,
+        thumbnailDisplayInterval: 200,
+        thumbnailDisplayOrder: 'rowByRow',
 
-                linkEl = figureEl.children[0]; // <a> element
+        // THUMBNAIL'S HOVER ANIMATION
+        thumbnailHoverEffect2: 'toolsSlideUp|labelSlideDown',
+        touchAnimation: true,
+        touchAutoOpenDelay: -1,
 
-                size = linkEl.getAttribute('data-size').split('x');
+        // GALLERY THEME
+        galleryTheme : {
+            thumbnail: { titleShadow : 'none', descriptionShadow : 'none', titleColor: '#fff', borderColor: '#fff' },
+            navigationPagination :  { background: '#3C4B5B', color: '#fff', colorHover: '#aaa', borderRadius: '4px' },
+        },
 
-                // create slide object
-                item = {
-                    src: linkEl.getAttribute('href'),
-                    w: parseInt(size[0], 10),
-                    h: parseInt(size[1], 10)
-                };
+        // callback to customize the content of the media info popup
+        fnPopupMediaInfo: my_popup_info,
 
+        // DEEP LINKING
+        locationHash: false
+    });
 
-
-                if(figureEl.children.length > 1) {
-                    // <figcaption> content
-                    item.title = figureEl.children[1].innerHTML;
-                }
-
-                if(linkEl.children.length > 0) {
-                    // <img> thumbnail element, retrieving thumbnail url
-                    item.msrc = linkEl.children[0].getAttribute('src');
-                }
-
-                item.el = figureEl; // save link to element for getThumbBoundsFn
-                items.push(item);
-            }
-
-            return items;
-        };
-
-        // find nearest parent element
-        var closest = function closest(el, fn) {
-            return el && ( fn(el) ? el : closest(el.parentNode, fn) );
-        };
-
-        // triggers when user clicks on thumbnail
-        var onThumbnailsClick = function(e) {
-            e = e || window.event;
-            e.preventDefault ? e.preventDefault() : e.returnValue = false;
-
-            var eTarget = e.target || e.srcElement;
-
-            // find root element of slide
-            var clickedListItem = closest(eTarget, function(el) {
-                return (el.tagName && el.tagName.toUpperCase() === 'FIGURE');
-            });
-
-            if(!clickedListItem) {
-                return;
-            }
-
-            // find index of clicked item by looping through all child nodes
-            // alternatively, you may define index via data- attribute
-            var clickedGallery = clickedListItem.parentNode,
-                childNodes = clickedListItem.parentNode.childNodes,
-                numChildNodes = childNodes.length,
-                nodeIndex = 0,
-                index;
-
-            for (var i = 0; i < numChildNodes; i++) {
-                if(childNodes[i].nodeType !== 1) {
-                    continue;
-                }
-
-                if(childNodes[i] === clickedListItem) {
-                    index = nodeIndex;
-                    break;
-                }
-                nodeIndex++;
-            }
-
-
-
-            if(index >= 0) {
-                // open PhotoSwipe if valid index found
-                openPhotoSwipe( index, clickedGallery );
-            }
-            return false;
-        };
-
-        // parse picture index and gallery index from URL (#&pid=1&gid=2)
-        var photoswipeParseHash = function() {
-            var hash = window.location.hash.substring(1),
-                params = {};
-
-            if(hash.length < 5) {
-                return params;
-            }
-
-            var vars = hash.split('&');
-            for (var i = 0; i < vars.length; i++) {
-                if(!vars[i]) {
-                    continue;
-                }
-                var pair = vars[i].split('=');
-                if(pair.length < 2) {
-                    continue;
-                }
-                params[pair[0]] = pair[1];
-            }
-
-            if(params.gid) {
-                params.gid = parseInt(params.gid, 10);
-            }
-
-            return params;
-        };
-
-        var openPhotoSwipe = function(index, galleryElement, disableAnimation, fromURL) {
-            var pswpElement = document.querySelectorAll('.pswp')[0],
-                gallery,
-                options,
-                items;
-
-            items = parseThumbnailElements(galleryElement);
-
-            // define options (if needed)
-            options = {
-
-                // define gallery index (for URL)
-                galleryUID: galleryElement.getAttribute('data-pswp-uid'),
-
-                getThumbBoundsFn: function(index) {
-                    // See Options -> getThumbBoundsFn section of documentation for more info
-                    var thumbnail = items[index].el.getElementsByTagName('img')[0], // find thumbnail
-                        pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
-                        rect = thumbnail.getBoundingClientRect();
-
-                    return {x:rect.left, y:rect.top + pageYScroll, w:rect.width};
-                }
-
-            };
-
-            // PhotoSwipe opened from URL
-            if(fromURL) {
-                if(options.galleryPIDs) {
-                    // parse real index when custom PIDs are used
-                    // http://photoswipe.com/documentation/faq.html#custom-pid-in-url
-                    for(var j = 0; j < items.length; j++) {
-                        if(items[j].pid == index) {
-                            options.index = j;
-                            break;
-                        }
-                    }
-                } else {
-                    // in URL indexes start from 1
-                    options.index = parseInt(index, 10) - 1;
-                }
-            } else {
-                options.index = parseInt(index, 10);
-            }
-
-            // exit if index not found
-            if( isNaN(options.index) ) {
-                return;
-            }
-
-            if(disableAnimation) {
-                options.showAnimationDuration = 0;
-            }
-
-            // Pass data to PhotoSwipe and initialize it
-            gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
-            gallery.init();
-        };
-
-        // loop through all gallery elements and bind events
-        var galleryElements = document.querySelectorAll( gallerySelector );
-
-        for(var i = 0, l = galleryElements.length; i < l; i++) {
-            galleryElements[i].setAttribute('data-pswp-uid', i+1);
-            galleryElements[i].onclick = onThumbnailsClick;
-        }
-
-        // Parse URL and open gallery if it contains #&pid=3&gid=1
-        var hashData = photoswipeParseHash();
-        if(hashData.pid && hashData.gid) {
-            openPhotoSwipe( hashData.pid ,  galleryElements[ hashData.gid - 1 ], true, true );
-        }
-    };
-
-    // execute above function
-    initPhotoSwipeFromDOM('.my-gallery');
-</script>
+    // Function called before the popup for media info is displayed
+    // Content and title can be changed
+    function my_popup_info(item, title, content){
+        var my_title = title + ' <b>nanogallery2</b>';
+        var my_content = content + '<br><br>[The content of this popup can be customized with some javascript.]';
+        return {title: my_title, content: my_content};
+    }
+</script>-->
 </body>
 
 
