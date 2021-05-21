@@ -8,6 +8,9 @@ const queue = require('async-promise-queue');
 const multer = require('multer')
 const multerS3 = require('multer-s3')
 const result = require("dotenv").config();
+var path = require('path')
+var os = require("os");
+var hostname = os.hostname();
 
 const AWS_BUCKET_NAME = "ooni-server-media-storage";
 
@@ -22,7 +25,8 @@ const s3 = new AWS.S3({
 
 
 
-const upload = multer({
+
+const _upload = multer({
     storage: multerS3({
         s3,
         bucket: process.env.AWS_BUCKET_NAME,
@@ -35,6 +39,21 @@ const upload = multer({
         }
     })
 
+})
+
+const localStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './public/images/uploads/')
+    },
+    filename: function (req, file, cb) {
+
+        cb(null, file.fieldname + '-' + Date.now()+`${path.extname(file.originalname)}`)
+    }
+})
+
+
+const upload = multer({
+    storage: localStorage
 })
 
 /* GET users listing. */
@@ -123,10 +142,13 @@ router.post('/photo',AuthController.verifyToken,upload.single('photo'), async fu
     let uploadedFile = req.file;
     console.log('userId ',userId)
     console.log('uploaded file is ',uploadedFile)
+
+
     if (uploadedFile){
+        uploadedFile.Location = req.protocol + '://' + req.get('host') +'/images/uploads/'+uploadedFile.filename;
         const uploaded = await knex('photo').insert({
             users_id: userId,
-            name: uploadedFile.originalname,
+            name:uploadedFile.filename,
             url: uploadedFile.location,
             isPosted:1,
             created_at: timestamps,
@@ -159,10 +181,11 @@ router.post('/media-background',AuthController.verifyToken,upload.array('backgro
     let uploadLocation = [];
 
     for (const backgroundUploadElement of backgroundUpload) {
+        backgroundUploadElement.Location = req.protocol + '://' + req.get('host') +'/images/uploads/'+backgroundUploadElement.filename;
         const uploaded = await knex('photo').insert({
             users_id: userId,
             name: backgroundUploadElement.originalname,
-            url: backgroundUploadElement.location,
+            url: backgroundUploadElement.Location,
             isPosted:0,
             created_at: timestamps,
             updated_at: timestamps
