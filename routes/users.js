@@ -156,7 +156,7 @@ router.post('/photo',AuthController.verifyToken,upload.single('photo'), async fu
         }).then((result) => {
             return res.status(200).json({
                 status: 'OK',
-                data: uploadedFile.location
+                data: uploadedFile.Location
             })
         }).catch((error) => {
             throw error
