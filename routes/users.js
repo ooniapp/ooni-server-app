@@ -149,7 +149,7 @@ router.post('/photo',AuthController.verifyToken,upload.single('photo'), async fu
         const uploaded = await knex('photo').insert({
             users_id: userId,
             name:uploadedFile.filename,
-            url: uploadedFile.location,
+            url: uploadedFile.Location,
             isPosted:1,
             created_at: timestamps,
             updated_at: timestamps
@@ -159,10 +159,15 @@ router.post('/photo',AuthController.verifyToken,upload.single('photo'), async fu
                 data: uploadedFile.location
             })
         }).catch((error) => {
-            console.log('error from database')
             throw error
         });
+    }else{
+        return res.status(200).json({
+            status: 'OK',
+            data: "No upload"
+        })
     }
+
 });
 
 
