@@ -36,7 +36,8 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: function (req,file) {
-            return `ooni-app-uploads/${req.userId}`
+            return `ooni-app-uploads/${req.userName}`
+
         },
         format: async (req, file) => {
             console.log('request file is',file)

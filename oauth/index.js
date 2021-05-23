@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const result = require("dotenv").config();
+const knex = require('../db');
 
 const verifyToken = async (req, res, next) => {
   try {
@@ -21,7 +22,9 @@ const verifyToken = async (req, res, next) => {
         .status(500)
         .send({ auth: false, message: "Failed to authenticate token." });
     }
+    const userInfo = await knex('users').where({id:user.id}).select('name', 'id').first();
     req.userId = user.id;
+    req.userName = userInfo.name
     return next();
   } catch (err) {
     console.error(err);
