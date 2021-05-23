@@ -2,6 +2,7 @@ exports.up = function(knex, Promise) {
   return knex.schema.createTable("photo", function(table) {
     table.increments();
     table.text('name');
+    table.text('folder');
     table.text("url");
     table.boolean("isPosted")
     table

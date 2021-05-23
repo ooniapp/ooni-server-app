@@ -9,8 +9,14 @@ const multer = require('multer')
 const multerS3 = require('multer-s3')
 const result = require("dotenv").config();
 var path = require('path')
-var os = require("os");
-var hostname = os.hostname();
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+cloudinary.config({
+    cloud_name: 'potchjust',
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET
+});
 
 const AWS_BUCKET_NAME = "ooni-server-media-storage";
 
@@ -26,34 +32,25 @@ const s3 = new AWS.S3({
 
 
 
-const _upload = multer({
-    storage: multerS3({
-        s3,
-        bucket: process.env.AWS_BUCKET_NAME,
-        acl: 'public-read',
-        metadata(req, file, cb) {
-            cb(null, {fieldName: file.fieldname});
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: function (req,file) {
+            return `ooni-app-uploads/${req.userId}`
         },
-        key(req, file, cb) {
-            cb(null,file.originalname);
+        format: async (req, file) => {
+            console.log('request file is',file)
+        }, // supports promises as well
+        public_id: (req, file) => {
+            console.log('public request file is',file)
         }
-    })
-
-})
-
-const localStorage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './public/images/uploads/')
     },
-    filename: function (req, file, cb) {
+});
 
-        cb(null, file.fieldname + '-' + Date.now()+`${path.extname(file.originalname)}`)
-    }
-})
 
 
 const upload = multer({
-    storage: localStorage
+    storage: storage
 })
 
 /* GET users listing. */
@@ -145,18 +142,19 @@ router.post('/photo',AuthController.verifyToken,upload.single('photo'), async fu
 
 
     if (uploadedFile){
-        uploadedFile.Location = req.protocol + '://' + req.get('host') +'/images/uploads/'+uploadedFile.filename;
+
         const uploaded = await knex('photo').insert({
             users_id: userId,
-            name:uploadedFile.filename,
-            url: uploadedFile.Location,
+            name:uploadedFile.originalname,
+            url: uploadedFile.path,
+            folder:userId,
             isPosted:1,
             created_at: timestamps,
             updated_at: timestamps
         }).then((result) => {
             return res.status(200).json({
                 status: 'OK',
-                data: uploadedFile.Location
+                data: uploadedFile.path
             })
         }).catch((error) => {
             throw error
@@ -182,15 +180,18 @@ router.post('/media-background',AuthController.verifyToken,upload.array('backgro
     const timestamps = await moment.utc().format();
     let backgroundUpload = req.files
 
+    console.log('ddd')
+
 
     let uploadLocation = [];
 
     for (const backgroundUploadElement of backgroundUpload) {
-        backgroundUploadElement.Location = req.protocol + '://' + req.get('host') +'/images/uploads/'+backgroundUploadElement.filename;
+
         const uploaded = await knex('photo').insert({
             users_id: userId,
             name: backgroundUploadElement.originalname,
-            url: backgroundUploadElement.Location,
+            url: backgroundUploadElement.path,
+            folder:userId,
             isPosted:0,
             created_at: timestamps,
             updated_at: timestamps
