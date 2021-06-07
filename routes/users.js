@@ -12,30 +12,20 @@ var path = require('path')
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
+
 cloudinary.config({
     cloud_name: 'potchjust',
     api_key: process.env.API_KEY,
     api_secret: process.env.API_SECRET
 });
 
-const AWS_BUCKET_NAME = "ooni-server-media-storage";
-
-
-const s3 = new AWS.S3({
-
-    credentials: {
-        accessKeyId: process.env.AWS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_KEY
-    },
-});
-
-
-
-
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: function (req,file) {
+            req.setTimeout(1700000,function () {
+                 console.log('timeout exception')
+            })
             return `ooni-app-uploads/${req.userName}`
 
         },
@@ -44,7 +34,8 @@ const storage = new CloudinaryStorage({
         }, // supports promises as well
         public_id: (req, file) => {
             console.log('public request file is',file)
-        }
+        },
+        "resource_type": "auto",
     },
 });
 
