@@ -4,10 +4,10 @@ module.exports = {
   development: {
     client: "mysql",
     connection: {
-      host : 'us-cdbr-east-03.cleardb.com',
-      user : 'bfbaf3145188e3',
-      password : 'a08cd334',
-      database : 'heroku_31115dc178c7353'
+      host : 'bph4d8g5xvbilnppc3du-mysql.services.clever-cloud.com',
+      user : 'uprmdbmqgk9kvemt',
+      password : 'z5yMquhj5GYRNUgvTnbX',
+      database : 'bph4d8g5xvbilnppc3du'
     },
     pool: {
       min: 2,
@@ -21,10 +21,10 @@ module.exports = {
   staging: {
     client: "mysql",
     connection: {
-      host : 'us-cdbr-east-03.cleardb.com',
-      user : 'bfbaf3145188e3',
-      password : 'a08cd334',
-      database : 'heroku_31115dc178c7353'
+      host : 'bph4d8g5xvbilnppc3du-mysql.services.clever-cloud.com',
+      user : 'uprmdbmqgk9kvemt',
+      password : 'z5yMquhj5GYRNUgvTnbX',
+      database : 'bph4d8g5xvbilnppc3du'
     },
     pool: {
       min: 2,
@@ -46,10 +46,10 @@ module.exports = {
   production: {
     client: "mysql",
     connection: {
-      host : 'us-cdbr-east-03.cleardb.com',
-      user : 'bfbaf3145188e3',
-      password : 'a08cd334',
-      database : 'heroku_31115dc178c7353'
+      host : 'bph4d8g5xvbilnppc3du-mysql.services.clever-cloud.com',
+    user : 'uprmdbmqgk9kvemt',
+    password : 'z5yMquhj5GYRNUgvTnbX',
+    database : 'bph4d8g5xvbilnppc3du'
     },
     pool: {
       min: 2,
