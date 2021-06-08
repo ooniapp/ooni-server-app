@@ -10,7 +10,7 @@ exports.up = function(knex, Promise) {
       .unsigned()
       .nullable();
     table.foreign("users_id").references("users.id");
-    table.timestamps();
+
   });
 };
 

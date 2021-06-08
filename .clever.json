@@ -1,0 +1,11 @@
+{
+  "apps": [
+    {
+      "app_id": "app_d4a2d7d4-8456-462b-b304-e15aa00a1895",
+      "org_id": "orga_6241024c-06f9-4963-b41b-5c6d0255d210",
+      "deploy_url": "https://github.com/ooniapp/ooni-server-app.git",
+      "name": "ooni-server-app",
+      "alias": "ooni-server-app"
+    }
+  ]
+}

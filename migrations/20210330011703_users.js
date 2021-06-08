@@ -7,7 +7,7 @@ exports.up = function(knex, Promise) {
     table.text("photo");
     table.specificType("active", "smallint");
     table.string("push_token", 60);
-    table.timestamps();
+  ;
   });
 };
 
