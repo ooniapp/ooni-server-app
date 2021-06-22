@@ -11,6 +11,7 @@ const result = require("dotenv").config();
 var path = require('path')
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const heicToJpeg = require('heic-to-jpeg-middleware')();
 
 
 cloudinary.config({
@@ -122,7 +123,7 @@ router.get('/photo', AuthController.verifyToken, async function (req, res, next)
 
 });
 
-router.post('/photo',AuthController.verifyToken,upload.single('photo'), async function (req, res, next) {
+router.post('/photo',AuthController.verifyToken,upload.single('photo'),heicToJpeg, async function (req, res, next) {
 
     const userId = req.userId;
     const moment = require("moment");
@@ -162,7 +163,7 @@ router.post('/photo',AuthController.verifyToken,upload.single('photo'), async fu
 
 
 //method for upload in background
-router.post('/media-background',AuthController.verifyToken,upload.array('backgroundUpload'),async function (req,res,next){
+router.post('/media-background',AuthController.verifyToken,upload.array('backgroundUpload'),heicToJpeg,async function (req,res,next){
      //upload the video and data in background
     const userId = req.userId;
     const token = req.headers["x-access-token"];
